@@ -54,7 +54,7 @@ def get_batch(image, label, image_W, image_H, batch_size, capacity):
     # 解码图像，解码为一个张量
     image = tf.image.decode_jpeg(image_contents, channels=3)
     # 对图像的大小进行调整，调整大小为image_W,image_H
-    image = tf.image.resize_image_with_crop_or_pad(image, image_W, image_H)
+    image = tf.image.resize_images(image, (image_W, image_H), method=1)
     # 对图像进行标准化
     image = tf.image.per_image_standardization(image)
     # 使用train.batch函数来组合样例，image和label代表训练样例和所对应的标签，batch_size参数
