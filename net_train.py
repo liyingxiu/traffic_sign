@@ -7,11 +7,11 @@ import read_data
 import net_model
 
 N_CLASSES = 4       # 分类个数
-IMG_W = 128
-IMG_H = 128         # 图像的尺寸
+IMG_W = 300
+IMG_H = 300         # 图像的尺寸
 BATCH_SIZE = 20
-CAPACITY = 7500     # 队列最大容量
-MAX_STEP = 15001     # 训练的迭代次数
+CAPACITY = 7000     # 队列最大容量
+MAX_STEP = 10001     # 训练的迭代次数
 learning_rate = 1e-5  # 学习率
 
 
