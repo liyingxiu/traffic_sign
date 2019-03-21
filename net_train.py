@@ -11,7 +11,7 @@ IMG_W = 128
 IMG_H = 128         # 图像的尺寸
 BATCH_SIZE = 20
 CAPACITY = 7500     # 队列最大容量
-MAX_STEP = 30001     # 训练的迭代次数
+MAX_STEP = 15001     # 训练的迭代次数
 learning_rate = 1e-5  # 学习率
 
 
@@ -55,7 +55,7 @@ def run_training():
             _, tra_loss, tra_acc = sess.run([train_op, train_loss, train_acc])
             # 打印一次损失值和准确率
             if step % 50 == 0:
-                print('Step{}, loss={:.2f}, accuracy={:.4f}'.format(step, tra_loss, tra_acc))
+                print('Step{}, loss={:.5f}, accuracy={:.4f}'.format(step, tra_loss, tra_acc))
                 summary_str = sess.run(summary_op)
                 train_writer.add_summary(summary_str, step)
             # 保存一次训练得到的模型
