@@ -7,11 +7,11 @@ import read_data
 import net_model
 
 N_CLASSES = 4       # 分类个数
-IMG_W = 300
-IMG_H = 300         # 图像的尺寸
+IMG_W = 208
+IMG_H = 208         # 图像的尺寸
 BATCH_SIZE = 20
-CAPACITY = 7000     # 队列最大容量
-MAX_STEP = 10001     # 训练的迭代次数
+CAPACITY = 8000     # 队列最大容量
+MAX_STEP = 40001     # 训练的迭代次数
 learning_rate = 1e-5  # 学习率
 
 
@@ -59,7 +59,7 @@ def run_training():
                 summary_str = sess.run(summary_op)
                 train_writer.add_summary(summary_str, step)
             # 保存一次训练得到的模型
-            if (step + 1) == MAX_STEP:
+            if (step + 1) == MAX_STEP or step == 20000 or step == 30000:
                 checkpoint_path = os.path.join(logs_train_dir, 'net_model.ckpt')
                 saver.save(sess, checkpoint_path, global_step=step)
     # 如果读取到文件队列末尾会抛出此异常
