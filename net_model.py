@@ -16,7 +16,7 @@ def inference(images, batch_size, n_classes):
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(images, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv1 = tf.nn.tanh(pre_activation, name=scope.name)
+        conv1 = tf.nn.relu(pre_activation, name=scope.name)
     with tf.variable_scope('pooling1') as scope:
         pool1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
@@ -29,7 +29,7 @@ def inference(images, batch_size, n_classes):
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(pool1, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv2 = tf.nn.tanh(pre_activation, name=scope.name)
+        conv2 = tf.nn.relu(pre_activation, name=scope.name)
     with tf.variable_scope('pooling2') as scope:
         pool2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
@@ -43,7 +43,7 @@ def inference(images, batch_size, n_classes):
                                   initializer=keras.initializers.he_normal(seed=None))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[128], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local3 = tf.nn.tanh(tf.matmul(reshape, weights) + biases, name=scope.name)
+        local3 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
 
     # layer4
     with tf.variable_scope('local4') as scope:
@@ -51,7 +51,7 @@ def inference(images, batch_size, n_classes):
                                   initializer=keras.initializers.he_normal(seed=None))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[84], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local4 = tf.nn.tanh(tf.matmul(local3, weights) + biases, name=scope.name)
+        local4 = tf.nn.relu(tf.matmul(local3, weights) + biases, name=scope.name)
 
     # layer5
     with tf.variable_scope('output_layer') as scope:
