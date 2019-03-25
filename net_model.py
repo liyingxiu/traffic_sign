@@ -9,7 +9,7 @@ def inference(images, batch_size, n_classes):
     # layer1
     with tf.variable_scope('conv1') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 3, 32], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(stddev=0.1, dtype=tf.float32))
+                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[32], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
@@ -22,7 +22,7 @@ def inference(images, batch_size, n_classes):
     # layer2
     with tf.variable_scope('conv2') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 32, 64], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(stddev=0.1, dtype=tf.float32))
+                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[64], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
@@ -39,7 +39,7 @@ def inference(images, batch_size, n_classes):
         # 获得reshape的列数，矩阵点乘要满足列数等于行数
         dim = reshape.get_shape()[1].value
         weights = tf.get_variable('weights', shape=[dim, 128], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(stddev=0.1, dtype=tf.float32))
+                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[128], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
         local3 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
@@ -47,7 +47,7 @@ def inference(images, batch_size, n_classes):
     # layer4
     with tf.variable_scope('local4') as scope:
         weights = tf.get_variable('weights', shape=[128, 84], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(stddev=0.1, dtype=tf.float32))
+                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[84], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
         local4 = tf.nn.tanh(tf.matmul(local3, weights) + biases, name=scope.name)
@@ -55,7 +55,7 @@ def inference(images, batch_size, n_classes):
     # layer5
     with tf.variable_scope('output_layer') as scope:
         weights = tf.get_variable('weights', shape=[84, n_classes], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(stddev=0.01, dtype=tf.float32))
+                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[n_classes], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
