@@ -2,6 +2,7 @@
 
 import tensorflow as tf
 #regularizer = 0.0001
+from tensorflow.python import keras
 
 
 def inference(images, batch_size, n_classes):

@@ -4,13 +4,16 @@ import tensorflow as tf
 import numpy as np
 
 
+import os
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
+
 def get_files():
     # 读取GroundTruth中的数据作为标签
-    f = open("E:/traffic_sign_detection/datasets/GroundTruth_train.txt", 'r')
+    f = open(os.path.join(BASE_DIR,"GroundTruth_train.txt"), 'r')
     line = f.readline()
     data_list = []
     while line:
-        line = 'E:/traffic_sign_detection/datasets/train_datasets/' + line
+        line = os.path.join(BASE_DIR, 'train_datasets', line)
         line = line.replace('\n', '')
         line = line.replace('warning', '0')
         line = line.replace('prohibitory', '1')

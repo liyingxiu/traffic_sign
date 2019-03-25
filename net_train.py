@@ -18,7 +18,7 @@ learning_rate = 3e-4  # 学习率
 # 定义开始训练的函数
 def run_training():
     # 输出文件的位置
-    logs_train_dir = 'E:/traffic_sign_detection/output'
+    logs_train_dir = './output_case_11'
     # 调用input_data文件的get_files()函数获得image_list, label_list
     train, train_label = read_data.get_files()
     # 获得image_batch, label_batch
