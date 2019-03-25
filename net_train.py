@@ -11,7 +11,7 @@ IMG_W = 208
 IMG_H = 208         # 图像的尺寸
 BATCH_SIZE = 20
 CAPACITY = 8000     # 队列最大容量
-MAX_STEP = 40001     # 训练的迭代次数
+MAX_STEP = 10001     # 训练的迭代次数
 learning_rate = 3e-4  # 学习率
 
 
