@@ -50,7 +50,7 @@ def inference(images, batch_size, n_classes):
                                   initializer=tf.contrib.layers.xavier_initializer(stddev=0.1, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[84], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local4 = tf.nn.relu(tf.matmul(local3, weights) + biases, name=scope.name)
+        local4 = tf.nn.tanh(tf.matmul(local3, weights) + biases, name=scope.name)
 
     # layer5
     with tf.variable_scope('output_layer') as scope:
