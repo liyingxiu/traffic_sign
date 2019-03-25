@@ -9,26 +9,26 @@ def inference(images, batch_size, n_classes):
     # layer1
     with tf.variable_scope('conv1') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 3, 32], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
+                                  initializer=keras.initializers.he_normal(seed=None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[32], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(images, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv1 = tf.nn.relu(pre_activation, name=scope.name)
+        conv1 = tf.nn.tanh(pre_activation, name=scope.name)
     with tf.variable_scope('pooling1') as scope:
         pool1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
     # layer2
     with tf.variable_scope('conv2') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 32, 64], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
+                                  initializer=keras.initializers.he_normal(seed=None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[64], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(pool1, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv2 = tf.nn.relu(pre_activation, name=scope.name)
+        conv2 = tf.nn.tanh(pre_activation, name=scope.name)
     with tf.variable_scope('pooling2') as scope:
         pool2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
@@ -39,15 +39,15 @@ def inference(images, batch_size, n_classes):
         # 获得reshape的列数，矩阵点乘要满足列数等于行数
         dim = reshape.get_shape()[1].value
         weights = tf.get_variable('weights', shape=[dim, 128], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
+                                  initializer=keras.initializers.he_normal(seed=None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[128], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local3 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
+        local3 = tf.nn.tanh(tf.matmul(reshape, weights) + biases, name=scope.name)
 
     # layer4
     with tf.variable_scope('local4') as scope:
         weights = tf.get_variable('weights', shape=[128, 84], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
+                                  initializer=keras.initializers.he_normal(seed=None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[84], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
         local4 = tf.nn.tanh(tf.matmul(local3, weights) + biases, name=scope.name)
@@ -55,7 +55,7 @@ def inference(images, batch_size, n_classes):
     # layer5
     with tf.variable_scope('output_layer') as scope:
         weights = tf.get_variable('weights', shape=[84, n_classes], dtype=tf.float32,
-                                  initializer=tf.contrib.layers.xavier_initializer(uniform = True, seed = None, dtype=tf.float32))
+                                  initializer=keras.initializers.he_normal(seed=None, dtype=tf.float32))
         #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[n_classes], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
