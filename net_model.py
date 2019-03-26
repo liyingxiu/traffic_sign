@@ -1,7 +1,7 @@
 # 建立训练时的网络模型
 
 import tensorflow as tf
-regularizer = 0.00001
+regularizer = 0.001
 from tensorflow.python import keras
 
 
