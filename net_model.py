@@ -1,7 +1,7 @@
 # 建立训练时的网络模型
 
 import tensorflow as tf
-regularizer = 0.0001
+#regularizer = 0.0001
 from tensorflow.python import keras
 
 
@@ -10,26 +10,26 @@ def inference(images, batch_size, n_classes):
     # layer1
     with tf.variable_scope('conv1') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 3, 32], dtype=tf.float32,
-                                  initializer=keras.initializers.he_normal(seed=None))
-        tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
+                                  initializer=keras.initializers.glorot_normal(seed=None))
+        #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[32], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(images, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv1 = tf.nn.relu(pre_activation, name=scope.name)
+        conv1 = tf.nn.tanh(pre_activation, name=scope.name)
     with tf.variable_scope('pooling1') as scope:
         pool1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
     # layer2
     with tf.variable_scope('conv2') as scope:
         weights = tf.get_variable('weights', shape=[5, 5, 32, 64], dtype=tf.float32,
-                                  initializer=keras.initializers.he_normal(seed=None))
-        tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
+                                  initializer=keras.initializers.glorot_normal(seed=None))
+        #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[64], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         conv = tf.nn.conv2d(pool1, weights, strides=[1, 1, 1, 1], padding='SAME')
         pre_activation = tf.nn.bias_add(conv, biases)
-        conv2 = tf.nn.relu(pre_activation, name=scope.name)
+        conv2 = tf.nn.tanh(pre_activation, name=scope.name)
     with tf.variable_scope('pooling2') as scope:
         pool2 = tf.nn.max_pool(conv2, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME', name=scope.name)
 
@@ -40,24 +40,24 @@ def inference(images, batch_size, n_classes):
         # 获得reshape的列数，矩阵点乘要满足列数等于行数
         dim = reshape.get_shape()[1].value
         weights = tf.get_variable('weights', shape=[dim, 128], dtype=tf.float32,
-                                  initializer=keras.initializers.he_normal(seed=None))
-        tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
+                                  initializer=keras.initializers.glorot_normal(seed=None))
+        #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[128], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local3 = tf.nn.relu(tf.matmul(reshape, weights) + biases, name=scope.name)
+        local3 = tf.nn.tanh(tf.matmul(reshape, weights) + biases, name=scope.name)
 
     # layer4
     with tf.variable_scope('local4') as scope:
         weights = tf.get_variable('weights', shape=[128, 84], dtype=tf.float32,
-                                  initializer=keras.initializers.he_normal(seed=None))
-        tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
+                                  initializer=keras.initializers.glorot_normal(seed=None))
+        #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[84], dtype=tf.float32, initializer=tf.constant_initializer(0.1))
-        local4 = tf.nn.relu(tf.matmul(local3, weights) + biases, name=scope.name)
+        local4 = tf.nn.tanh(tf.matmul(local3, weights) + biases, name=scope.name)
 
     # layer5
     with tf.variable_scope('output_layer') as scope:
         weights = tf.get_variable('weights', shape=[84, n_classes], dtype=tf.float32,
-                                  initializer=keras.initializers.he_normal(seed=None))
-        tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
+                                  initializer=keras.initializers.glorot_normal(seed=None))
+        #tf.add_to_collection('loss_w', tf.contrib.layers.l2_regularizer(regularizer)(weights))
         biases = tf.get_variable('biases', shape=[n_classes], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         output = tf.add(tf.matmul(local4, weights), biases, name=scope.name)
@@ -73,7 +73,7 @@ def losses(prediction, labels):
                                                                        name='x_entropy_per_example')
         # 求cross_entropy所有元素的平均值
         loss = tf.reduce_mean(cross_entropy, name='loss')
-        loss = loss + tf.add_n(tf.get_collection('loss_w'))
+        #loss = loss + tf.add_n(tf.get_collection('loss_w'))
         # 对loss值进行标记汇总，一般在画loss, accuracy时会用到这个函数。
         tf.summary.scalar(scope.name, loss)
     return loss
