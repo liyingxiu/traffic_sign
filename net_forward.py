@@ -1,6 +1,5 @@
 #coding:utf-8
 import tensorflow as tf
-from tensorflow.python import keras
 
 #设定神经网络的超参数
 
@@ -25,8 +24,7 @@ OUTPUT_NODE = 10
 # 定义初始化网络权重函数
 def get_weight(shape, regularizer):
     # tf.truncated_normal 生成去掉过大偏离点的正态分布随机数的张量，stddev 是指定标准差
-    w = tf.get_variable('w', shape, dtype=tf.float32,
-                        initializer=keras.initializers.he_normal(seed=None))
+    w = tf.Variable(tf.truncated_normal(shape,stddev=0.1))
     # 为权重加入 L2 正则化，通过限制权重的大小，使模型不会随意拟合训练数据中的随机噪音
     if regularizer != None: tf.add_to_collection('losses', tf.contrib.layers.l2_regularizer(regularizer)(w))
     return w

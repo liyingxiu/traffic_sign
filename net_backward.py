@@ -18,7 +18,7 @@ MODEL_NAME = "mnist_model"  # 模型命名
 
 
 # 训练过程
-def backward(mnist):
+def backward():
     #x, y_是定义的占位符，需要指定参数的类型，维度（要和网络的输入与输出维度一致），类似于函数的形参，运行时必须传入值
     x = tf.placeholder(tf.float32, [
         BATCH_SIZE,
@@ -60,23 +60,16 @@ def backward(mnist):
             saver.restore(sess, ckpt.model_checkpoint_path)  # 加载最新的模型
 
         for i in range(STEPS):
-            xs, ys = mnist.train.next_batch(BATCH_SIZE)  # 读取一个 batch 的数据,不确定是否会出错
-            reshaped_xs, reshaped_ys = read_data.get_batch(xs, ys(  # 将输入数据 xs 转换成与网络输入相同形状的矩阵
-                net_forward.IMAGE_SIZE,
-                net_forward.IMAGE_SIZE,
-                BATCH_SIZE,
-                capacity=7500))
+            # 调用input_data文件的get_files()函数获得image_list, label_list
+            xs, ys = read_data.get_files()
+            reshaped_xs, reshaped_ys = read_data.get_batch(xs, ys, net_forward.IMAGE_SIZE, net_forward.IMAGE_SIZE, BATCH_SIZE, 7500)
             # 喂入训练图像和标签，开始训练
             _, loss_value, step = sess.run([train_op, loss, global_step], feed_dict={x: reshaped_xs,
-                                                                                     y_: reshaped_ys})
+                                                                                     y_: ys})
             if i % 50 == 0:  # 每迭代 100 次打印 loss 信息，并保存最新的模型
                 print('After %d training step(s), loss on training batch is %g.'.format(step, loss_value))
                 saver.save(sess, os.path.join(MODEL_SAVE_PATH, MODEL_NAME),
                            global_step=global_step)
 
-def main():
-    traffic_sign_mnist = input_data.read_data_sets("./data/", one_hot=True)  # 读入 mnist 数据
-    backward(traffic_sign_mnist)
-
 if __name__ == '__main__':
-    main()
+    backward()
