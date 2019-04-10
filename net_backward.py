@@ -1,6 +1,7 @@
 # coding:utf-8
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
+import read_data
 import net_forward
 import os
 import numpy as np
@@ -60,14 +61,14 @@ def backward(mnist):
 
         for i in range(STEPS):
             xs, ys = mnist.train.next_batch(BATCH_SIZE)  # 读取一个 batch 的数据,不确定是否会出错
-            reshaped_xs = np.reshape(xs, (  # 将输入数据 xs 转换成与网络输入相同形状的矩阵
+            reshaped_xs, reshaped_ys = read_data.get_batch(xs, ys(  # 将输入数据 xs 转换成与网络输入相同形状的矩阵
+                net_forward.IMAGE_SIZE,
+                net_forward.IMAGE_SIZE,
                 BATCH_SIZE,
-                net_forward.IMAGE_SIZE,
-                net_forward.IMAGE_SIZE,
-                net_forward.NUM_CHANNELS))
+                capacity=7500))
             # 喂入训练图像和标签，开始训练
             _, loss_value, step = sess.run([train_op, loss, global_step], feed_dict={x: reshaped_xs,
-                                                                                     y_: ys})
+                                                                                     y_: reshaped_ys})
             if i % 50 == 0:  # 每迭代 100 次打印 loss 信息，并保存最新的模型
                 print('After %d training step(s), loss on training batch is %g.'.format(step, loss_value))
                 saver.save(sess, os.path.join(MODEL_SAVE_PATH, MODEL_NAME),
