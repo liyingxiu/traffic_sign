@@ -3,14 +3,13 @@
 import tensorflow as tf
 import numpy as np
 
+
 import os
-
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-
 
 def get_files():
     # 读取GroundTruth中的数据作为标签
-    f = open(os.path.join(BASE_DIR, "GroundTruth_train.txt"), 'r')
+    f = open(os.path.join(BASE_DIR,"GroundTruth_train.txt"), 'r')
     line = f.readline()
     data_list = []
     while line:
@@ -26,20 +25,16 @@ def get_files():
     f.close()
     data_array = np.array(data_list)
     image_list = list(data_array[:, 0])
-    label_list = []
-    for label in data_array[:, 5]:
-        real_label = [0] * 4
-        real_label[int(label)] = 1
-        label_list.append(real_label)
+    label_list = list(data_array[:, 5])
+    label_list = list(map(int, label_list))
     return image_list, label_list
 
 
-image_list, label_list = get_files()
-
-
-def get_batch(image_W, image_H, batch_size, capacity):
+def get_batch(image, label, image_W, image_H, batch_size, capacity):
     """
     Args:
+        image: list type
+        label: list type
         image_W: image width
         image_H: image height
         batch_size: batch size
@@ -50,8 +45,8 @@ def get_batch(image_W, image_H, batch_size, capacity):
     """
 
     # 数据转换
-    image = tf.cast(image_list, tf.string)  # 将image数据转换为string类型
-    label = tf.cast(label_list, tf.int32)  # 将label数据转换为int类型
+    image = tf.cast(image, tf.string)  # 将image数据转换为string类型
+    label = tf.cast(label, tf.int32)  # 将label数据转换为int类型
 
     # 生成输入的队列，每次在数据集中产生一个切片
     input_queue = tf.train.slice_input_producer([image, label])
@@ -73,7 +68,12 @@ def get_batch(image_W, image_H, batch_size, capacity):
                                                       num_threads=64,
                                                       capacity=capacity,
                                                       min_after_dequeue=1)
-    label_batch = tf.reshape(label_batch, [batch_size, 4])
+    label_batch = tf.reshape(label_batch, [batch_size])
     image_batch = tf.cast(image_batch, tf.float32)
+
+    with tf.Session() as sess:
+        sess.run(label_batch)
+        sess.run(image_batch)
+
 
     return image_batch, label_batch

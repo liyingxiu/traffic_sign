@@ -61,7 +61,7 @@ def inference(images, batch_size, n_classes):
         biases = tf.get_variable('biases', shape=[n_classes], dtype=tf.float32,
                                  initializer=tf.constant_initializer(0.1))
         output = tf.add(tf.matmul(local4, weights), biases, name=scope.name)
-
+        #output1 = tf.argmax(output, 1, name='output1')
     return output
 
 
