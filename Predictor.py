@@ -65,7 +65,11 @@ class Prodector:
         self.sess = tf.Session()
         # 载入模型参数
         self.saver = tf.train.Saver()
-        self.saver.restore(self.sess, tf.train.latest_checkpoint(self.model_path))
+        # ckpt = tf.train.get_checkpoint_state("./model/")  # 通过 checkpoint 文件定位到最新保存的模型
+        # if ckpt and ckpt.model_checkpoint_path:
+        self.saver.restore(self.sess,"./model/traffic_model-4901")  # 加载最新的模型
+
+        # self.saver.restore(self.sess, tf.train.latest_checkpoint(self.model_path))
 
     def prodect(self):
         start = time.perf_counter()  # 开始计时

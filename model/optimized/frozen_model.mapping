@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<mapping>
+	<map>
+		<framework name="conv2/Relu" out_port_id="0"/>
+		<IR id="5" name="conv2/Relu" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="pooling1/MaxPool" out_port_id="0"/>
+		<IR id="3" name="pooling1/MaxPool" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="local3/Relu" out_port_id="0"/>
+		<IR id="10" name="local3/Relu" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="pooling2/MaxPool" out_port_id="0"/>
+		<IR id="6" name="pooling2/MaxPool" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="conv1/BiasAdd" out_port_id="0"/>
+		<IR id="1" name="conv1/Conv2D" out_port_id="3"/>
+	</map>
+	<map>
+		<framework name="local3/add" out_port_id="0"/>
+		<IR id="9" name="local3/MatMul" out_port_id="3"/>
+	</map>
+	<map>
+		<framework name="conv1/Relu" out_port_id="0"/>
+		<IR id="2" name="conv1/Relu" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="local4/output" out_port_id="0"/>
+		<IR id="11" name="local4/MatMul" out_port_id="3"/>
+	</map>
+	<map>
+		<framework name="local3/Reshape/shape" out_port_id="0"/>
+		<IR id="7" name="local3/Reshape/shape/Output_0/Data__const" out_port_id="1"/>
+	</map>
+	<map>
+		<framework name="local3/Reshape" out_port_id="0"/>
+		<IR id="8" name="local3/Reshape" out_port_id="2"/>
+	</map>
+	<map>
+		<framework name="conv2/BiasAdd" out_port_id="0"/>
+		<IR id="4" name="conv2/Conv2D" out_port_id="3"/>
+	</map>
+	<map>
+		<framework name="Placeholder" out_port_id="0"/>
+		<IR id="0" name="Placeholder" out_port_id="0"/>
+	</map>
+</mapping>

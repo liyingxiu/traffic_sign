@@ -5,16 +5,14 @@ import numpy as np
 
 import os
 
-BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 
-
-def get_files():
+def get_files(label_file_name, dataset_path):
     # 读取GroundTruth中的数据作为标签
-    f = open(os.path.join(BASE_DIR, "GroundTruth_train.txt"), 'r')
+    f = open(label_file_name, 'r')
     line = f.readline()
     data_list = []
     while line:
-        line = os.path.join(BASE_DIR, 'train_datasets', line)
+        line = os.path.join(dataset_path, line)
         line = line.replace('\n', '')
         line = line.replace('warning', '0')
         line = line.replace('prohibitory', '1')
@@ -34,10 +32,7 @@ def get_files():
     return image_list, label_list
 
 
-image_list, label_list = get_files()
-
-
-def get_batch(image_W, image_H, batch_size, capacity):
+def get_batch(image_list, label_list, image_W, image_H, batch_size, capacity):
     """
     Args:
         image_W: image width
@@ -73,7 +68,5 @@ def get_batch(image_W, image_H, batch_size, capacity):
                                                       num_threads=64,
                                                       capacity=capacity,
                                                       min_after_dequeue=1)
-    label_batch = tf.reshape(label_batch, [batch_size, 4])
-    image_batch = tf.cast(image_batch, tf.float32)
 
     return image_batch, label_batch

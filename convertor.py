@@ -36,7 +36,10 @@ def freeze_graph(input_checkpoint, output_graph):
     with tf.Session() as sess:
         saver.restore(sess, input_checkpoint)  # 恢复图并得到数据
         graph = sess.graph
-        output_node_names = ','.join([node.name for node in graph.as_graph_def().node])
+        for node in tf.get_default_graph().as_graph_def().node:
+            print(node.name)
+
+        output_node_names = 'local4/output'
 
         output_graph_def = graph_util.convert_variables_to_constants(  # 模型持久化，将变量值固定
             sess=sess,
@@ -47,15 +50,15 @@ def freeze_graph(input_checkpoint, output_graph):
             f.write(output_graph_def.SerializeToString())  # 序列化输出
         print("%d ops in the final graph." % len(output_graph_def.node))  # 得到当前图有几个操作节点
 
-        # for op in sess.graph.get_operations():
-        #     print(op.name, op.values())
+        for op in sess.graph.get_operations():
+            print(op.name, op.values())
 
 
 
 if __name__ == '__main__':
     # 输入ckpt模型路径
-    input_checkpoint = 'models/net_model.ckpt-10000'
+    input_checkpoint = 'model/traffic_model-9901'
     # 输出pb模型的路径
-    out_pb_path = "models/pb/frozen_model.pb"
+    out_pb_path = "model/pb/frozen_model.pb"
     # 调用freeze_graph将ckpt转为pb
     freeze_graph(input_checkpoint, out_pb_path)
